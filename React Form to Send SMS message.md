@@ -63,26 +63,46 @@ const handleSubmit = (event) => {
 Here's the updated `SmsForm` component with Twilio integration:
 ```jsx
 import React, { useState } from 'react';
-import Twilio from 'twilio';
-
-const accountSid = 'your_account_sid';
-const authToken = 'your_auth_token';
-const client = new Twilio(accountSid, authToken);
+import twilio from 'twilio';
 
 const SmsForm = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [message, setMessage] = useState('');
+  const [error, setError] = useState(null);
+  const [isValid, setIsValid] = useState(false);
+
+  const accountSid = 'your_account_sid';
+  const authToken = 'your_auth_token';
+  const client = new twilio(accountSid, authToken);
+
+  const validatePhoneNumber = (phoneNumber) => {
+    const regex = /^\d{3}-\d{3}-\d{4}$/;
+    return regex.test(phoneNumber);
+  };
+
+  const validateMessage = (message) => {
+    return message.length > 0 && message.length <= 160;
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const message = client.messages
-      .create({
-        from: 'your_twilio_phone_number',
-        to: phoneNumber,
-        body: message,
-      })
-      .then((message) => console.log(message.sid))
-      .done();
+    if (validatePhoneNumber(phoneNumber) && validateMessage(message)) {
+      setIsValid(true);
+      client.messages
+        .create({
+          from: 'your_twilio_phone_number',
+          to: phoneNumber,
+          body: message,
+        })
+        .then((message) => {
+          console.log(`SMS sent successfully: ${message.sid}`);
+        })
+        .catch((error) => {
+          setError(error.message);
+        });
+    } else {
+      setError('Invalid phone number or message');
+    }
   };
 
   return (
@@ -94,6 +114,8 @@ const SmsForm = () => {
           value={phoneNumber}
           onChange={(event) => setPhoneNumber(event.target.value)}
           required
+          pattern="\d{3}-\d{3}-\d{4}"
+          title="Phone number must be in the format XXX-XXX-XXXX"
         />
       </label>
       <br />
@@ -103,9 +125,13 @@ const SmsForm = () => {
           value={message}
           onChange={(event) => setMessage(event.target.value)}
           required
+          maxLength="160"
+          minLength="1"
         />
       </label>
       <br />
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {isValid && <p style={{ color: 'green' }}>SMS sent successfully!</p>}
       <button type="submit">Send SMS</button>
     </form>
   );
