@@ -34,7 +34,7 @@ Install the required library or SDK for the chosen SMS gateway or API. For examp
 
 Import the library and set the API credentials in your React component:
  ```jsx
- import Twilio from 'twilio';
+import Twilio from 'twilio';
 
 const accountSid = 'your_account_sid';
 const authToken = 'your_auth_token';
