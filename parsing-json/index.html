@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parse JSON Example</title>
+  </head>
+  <body>
+    <h1>Parse JSON Example</h1>
+    <script>
+      // Fetch the JSON file
+      fetch("data.json")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((jsonData) => {
+          console.log("Parsed JSON data:", jsonData);
+
+          // Accessing data
+          console.log("Name:", jsonData.name);
+          console.log("Age:", jsonData.age);
+          console.log("City:", jsonData.city);
+        })
+        .catch((error) => {
+          console.error("Error fetching or parsing JSON:", error);
+        });
+    </script>
+  </body>
+</html>
