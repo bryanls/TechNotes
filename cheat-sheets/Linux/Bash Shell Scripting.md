@@ -224,14 +224,3 @@ fi
 In the example above, the `command_to_evaluate` should be replaced by the command you want to evaluate. The `if` statement checks the exit code of the command using the `-eq` operator to check if the exit code is equal to 0 (which means the command succeeded). If the exit code is not equal to 0, then the `else` statement will be executed, indicating that the command failed.
 
 Note that the exit code of a command is an integer between 0 and 255, where 0 usually indicates success and any other value indicates failure. Different commands may have different conventions for what exit codes they return, so it's a good idea to check the documentation for each command to understand its exit code conventions.
-
-
-
-
-
-
-
-
-
-
-
